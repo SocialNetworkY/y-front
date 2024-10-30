@@ -20,7 +20,6 @@ yarn-error.log*
 .idea/vcs.xml
 .idea/copyright/
 .idea/shelf/
-.idea/modules.xml
 
 # Build directories
 build/
