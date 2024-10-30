@@ -1,0 +1,53 @@
+@import "../mixins";
+@import "../fonts";
+@import "../vars";
+
+.header {
+  width: rem(275);
+  &__container {
+    padding: rem(12);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav {
+    li {
+      img {
+        width: rem(24);
+        height: rem(24);
+      }
+      margin-top: rem(8);
+      &:hover {
+        cursor: pointer;
+        a {
+          background-color: rgba(231,233,234,0.1);
+        }
+      }
+      a {
+        transition-duration: 0.2s;
+        border-radius: 99999px;
+        padding: rem(13);
+        display: flex;
+        align-items: center;
+        width: fit-content;
+        font-size: remF(19);
+        font-weight: bold;
+        >:not(:last-child) {
+          margin-right: rem(20);
+
+        }
+        span {
+          margin-right: rem(16);
+          color: var(--white);
+        }
+      }
+    }
+  }
+  button {
+    margin-top: rem(32);
+  }
+  .account {
+    margin-top: auto;
+  }
+}
