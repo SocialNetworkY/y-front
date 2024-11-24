@@ -51,13 +51,16 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
         const performRefresh = async () => {
-            const refreshResult = await refreshToken();
-            if (refreshResult) {
-                navigate("/login");
+            try {
+                await refreshToken();
+                if (accessToken === "") {
+                    navigate("/login");
+                }
+                navigate("/feed");
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         };
-
         performRefresh();
     }, []);
 

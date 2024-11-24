@@ -30,6 +30,7 @@ export function PopupLogin() {
 
             let response = await fetch(`${constants.authApiV1}/login`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8',
                 },

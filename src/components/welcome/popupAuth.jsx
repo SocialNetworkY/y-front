@@ -51,7 +51,6 @@ export function PopupAuth() {
 
             let response = await fetch(`${constants.authApiV1}/register`, {
                 method: 'POST',
-                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8',
                 },
