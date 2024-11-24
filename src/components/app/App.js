@@ -3,17 +3,21 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; // И
 import Welcome from "../welcome/welcome";
 import Feed from "../feed/feed";
 import './App.css';
+import {AuthProvider} from "../../context/authContext";
+
 
 class App extends Component {
     render() {
         return (
             <Router>
-                <div className="App">
-                    <Routes>
-                        <Route path="/" element={<Welcome />} />
-                        <Route path="/feed" element={<Feed />} />
-                    </Routes>
-                </div>
+                <AuthProvider>
+                    <div className="App">
+                        <Routes>
+                            <Route path="/login" element={<Welcome />} />
+                            <Route path="/feed" element={<Feed />} />
+                        </Routes>
+                    </div>
+                </AuthProvider>
             </Router>
         );
     }

@@ -4,11 +4,17 @@
 
 .header {
   width: rem(275);
+  flex-shrink: 0;
+  .container {
+    height: 100%;
+  }
   &__container {
     padding: rem(12);
     height: 100vh;
     display: flex;
     flex-direction: column;
+    position: sticky;
+    top: 0;
   }
 
   .nav {
@@ -16,6 +22,10 @@
       img {
         width: rem(24);
         height: rem(24);
+      }
+      svg {
+        width: rem(30);
+        height: rem(30);
       }
       margin-top: rem(8);
       &:hover {
