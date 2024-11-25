@@ -12,18 +12,18 @@ export function useAuth() {
 export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
     const [accessToken, setAccessToken] = useState('');
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     async function sendRequest(requestOptions) {
 
         async function makeRequest() {
-            if (!requestOptions.headers) {
+            if(!requestOptions.headers) {
                 requestOptions.headers = {};
             }
             requestOptions.headers['Authorization'] = `Bearer ${accessToken}`;
             try {
-                response = await fetch(requestOptions.url, requestOptions);
-                return response;
+                return await fetch(requestOptions.url, requestOptions);
             } catch (error) {
                 console.error("Network error:", error);
                 throw error;
@@ -53,16 +53,37 @@ export function AuthProvider({ children }) {
         const performRefresh = async () => {
             try {
                 await refreshToken();
+                console.log(accessToken);
                 if (accessToken === "") {
                     navigate("/login");
-                }
-                navigate("/feed");
+                } navigate("/feed");
             } finally {
                 setLoading(false);
             }
         };
         performRefresh();
     }, []);
+
+
+    async function currentUser() {
+        if (user) return user;
+
+        try {
+            const firstResp = await sendRequest({url: `${constants.authApiV1}/authenticate`});
+            if (!firstResp.ok) throw new Error(`Failed to fetch user id: ${firstResp.statusText}`);
+            const firstRespData = await firstResp.json();
+
+            const secondResp = await sendRequest({url: `${constants.userApiV1}/users/${firstRespData.user_id}/full`});
+            if (!secondResp.ok) throw new Error(`Failed to fetch user details: ${secondResp.statusText}`);
+
+            const userData = await secondResp.json();
+            setUser(userData);
+            return userData;
+        } catch (error) {
+            console.error('Error fetching current user:', error);
+            throw error;
+        }
+    }
 
 
     async function refreshToken() {
@@ -74,6 +95,7 @@ export function AuthProvider({ children }) {
 
         if(refresh.ok) {
             setAccessToken(refreshResponse.token)
+            return;
         } else {
             return refresh;
         }
@@ -83,11 +105,12 @@ export function AuthProvider({ children }) {
     const value = {
         setAccessToken,
         sendRequest,
+        currentUser
     }
 
     return (
-        <AuthContext.Provider value={value}>
-            {!loading && children}
-        </AuthContext.Provider>
+      <AuthContext.Provider value={value}>
+          {!loading && children}
+      </AuthContext.Provider>
     );
 }

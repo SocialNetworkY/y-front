@@ -1,9 +1,11 @@
 import { Component } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; // Изменили Switch на Routes
-import Welcome from "../welcome/welcome";
-import Feed from "../feed/feed";
 import './App.css';
 import {AuthProvider} from "../../context/authContext";
+
+import Profile from '../profile/profile'
+import Feed from "../feed/feed";
+import Welcome from "../welcome/welcome";
 
 
 class App extends Component {
@@ -15,6 +17,7 @@ class App extends Component {
                         <Routes>
                             <Route path="/login" element={<Welcome />} />
                             <Route path="/feed" element={<Feed />} />
+                            <Route path="/profile" element={<Profile/>} />
                         </Routes>
                     </div>
                 </AuthProvider>

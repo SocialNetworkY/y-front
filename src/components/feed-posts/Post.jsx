@@ -1,9 +1,14 @@
-import React, { useState } from "react";
-import postAva from './img/tweet-logo1.png'; // Укажите верный путь к картинке
-import Comment from './post-comments'; // Импорт компонента для комментариев
+import React, { useContext, useState } from 'react'
+import postAva from './img/tweet-logo1.png';
+import Comment from './post-comments';
+import postImg from '../../img/AI-gigapixel.jpg';
+import postSettingsImg from './img/dots.svg'
+import { useAuth } from '../../context/authContext'
 
 export default function Post({ postData, onToggleComments, onToggleLike, onAddComment }) {
-  const [newComment, setNewComment] = useState(""); // Локальное состояние для нового комментария
+  const [newComment, setNewComment] = useState("");
+
+  const {currentUser} = useAuth();
 
   const handleCommentChange = (e) => {
     setNewComment(e.target.value);
@@ -16,24 +21,49 @@ export default function Post({ postData, onToggleComments, onToggleLike, onAddCo
     }
   };
 
+  const postSettings = () => {
+
+  }
+
   return (
     <div className="tweet">
       <a href="/" className="tweet__avatar">
         <img src={postAva} alt="Avatar" />
       </a>
       <div className="tweet__information">
-        <div className="tweet__title">
-          <a href="/" className="tweet__title-name">{postData.name}</a>
+        <div className="tweet__settings show">
+          <div onClick={postSettings} className="tweet__settings-btn"><img src={postSettingsImg} alt=""/></div>
+          <div className="tweet__settings-list">
+            <ul>
+              {(postData.user_id !== currentUser().id && !currentUser().admin) && <li><span>Report</span></li>}
+
+              {(currentUser().admin || postData.user_id === currentUser().id) &&
+                <>
+                  <li><span>Edit</span></li>
+                  <li><span>Delete</span></li>
+                </>
+              }
+
+            </ul>
+          </div>
+      </div>
+      <div className="tweet__title">
+          {/*<a href="/" className="tweet__title-name">{postData.name}</a>*/}
+          <a href="/" className="tweet__title-name">aslkdjalskdjaklsjdalksjdklasjdlkaj</a>
           <div className="tweet__title-tag">{postData.tag}</div>
           <div className="tweet__title-time">{postData.time}</div>
         </div>
         <div className="tweet__content">
+          <span>{postData.title}</span>
           <p>{postData.content}</p>
-          {postData.img && (
-            <div className="tweet__content-img">
-              <img src={postData.img} alt="Post content" />
-            </div>
-          )}
+          {/*{postData.img && (*/}
+          {/*  <div className="tweet__content-img">*/}
+          {/*    <img src={postData.img} alt=""/>*/}
+          {/*  </div>*/}
+          {/*)}*/}
+          <div className="tweet__content-img">
+            <img src={postImg} alt=""/>
+          </div>
         </div>
         <div className="tweet__controls">
           <div
@@ -76,7 +106,7 @@ export default function Post({ postData, onToggleComments, onToggleLike, onAddCo
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"></path>
               </svg>
             </div>
-            <span>{postData.comments.length}</span>
+            <span>{postData.length}</span>
           </div>
         </div>
 

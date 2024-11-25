@@ -10,7 +10,7 @@ class FeedProfile extends Component {
         this.state = {
             isPopupVisible:false,
             activeTab: "1",
-            posts: [ // Твиты для вкладки "Posts"
+            posts: [
                 {
                     id: 1,
                     avatar: postAva,
@@ -26,9 +26,8 @@ class FeedProfile extends Component {
                         like: false,
                     },
                 },
-                // Добавьте больше твитов, если нужно
             ],
-            likes: [ // Твиты для вкладки "Likes"
+            likes: [
                 {
                     id: 2,
                     avatar: postAva,
@@ -44,9 +43,8 @@ class FeedProfile extends Component {
                         like: false,
                     },
                 },
-                // Добавьте больше твитов, если нужно
             ],
-            reposts: [ // Твиты для вкладки "Reposts"
+            reposts: [
                 {
                     id: 3,
                     avatar: postAva,
@@ -92,7 +90,6 @@ class FeedProfile extends Component {
                         like: false,
                     },
                 },
-                // Добавьте больше твитов, если нужно
             ],
         };
     }
@@ -234,5 +231,6 @@ class FeedProfile extends Component {
         );
     }
 }
+
 
 export default FeedProfile;

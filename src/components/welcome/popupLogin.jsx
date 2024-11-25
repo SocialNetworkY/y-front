@@ -81,24 +81,24 @@ export function PopupLogin() {
 
 
     return (
-        <form onSubmit={dataPickUp} className="popup-tab">
-            <div className="popup-title"><h3>Sign in</h3></div>
-            <div onClick={handleInputFocus} className="popup-input">
-                <div className="popup-input__text">
-                    <span className='popup-input__text-name'>Login</span>
-                </div>
-                <input required onBlur={handleInputBlur} onChange={loginOnChange} type="text"/>
-            </div>
-            <div onClick={handleInputFocus} className="popup-input">
-                <div className="popup-input__text">
-                    <span className='popup-input__text-name'>Password</span>
-                    <span className='popup-input__text-symbols'>{pass.length}/{maxLength}</span>
-                </div>
-                <input required onBlur={handleInputBlur} onChange={passwordOnChange} type="password"/>
-            </div>
-            <button disabled={isBtnBlocked} type='submit' className="popup-next">
-                <span>Confirm</span>
-            </button>
-        </form>
+      <form onSubmit={dataPickUp} className="popup-tab">
+          <div className="popup-title"><h3>Sign in</h3></div>
+          <div onClick={handleInputFocus} className="popup-input">
+              <div className="popup-input__text">
+                  <span className='popup-input__text-name'>Login</span>
+              </div>
+              <input required onBlur={handleInputBlur} onChange={loginOnChange} type="text"/>
+          </div>
+          <div onClick={handleInputFocus} className="popup-input">
+              <div className="popup-input__text">
+                  <span className='popup-input__text-name'>Password</span>
+                  <span className='popup-input__text-symbols'>{pass.length}/{maxLength}</span>
+              </div>
+              <input required onBlur={handleInputBlur} onChange={passwordOnChange} type="password"/>
+          </div>
+          <button disabled={isBtnBlocked} type='submit' className="popup-next">
+              <span>Confirm</span>
+          </button>
+      </form>
     )
 }

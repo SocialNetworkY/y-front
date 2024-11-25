@@ -114,38 +114,38 @@ export function PopupAuth() {
 
 
     return (
-        <form onSubmit={dataPickUp} className="popup-tab">
-            <div className="popup-title"><h3>Create your account</h3></div>
-            <div onClick={handleInputFocus} className='popup-input'>
-                <div className="popup-input__text">
-                    <span className='popup-input__text-name'>Name</span>
-                    <span className='popup-input__text-symbols'>{username.length}/{maxLength}</span>
-                </div>
-                <input required onBlur={handleInputBlur} type="text" onChange = {usernameOnChange} />
-            </div>
-            <div onClick={handleInputFocus} className="popup-input">
-                <div className="popup-input__text">
-                    <span className='popup-input__text-name'>Email</span>
-                </div>
-                <input required onBlur={handleInputBlur} type="email" onChange = {(event) => {setEmail(event.target.value)}}  />
-            </div>
-            <div onClick={handleInputFocus} className="popup-input">
-                <div className="popup-input__text">
-                    <span className='popup-input__text-name'>Password</span>
-                    <span className='popup-input__text-symbols'>{pass.length}/{maxLength}</span>
-                </div>
-                <input required onBlur={handleInputBlur} type="password" onChange = {passwordOnChange} />
-            </div>
-            <div onClick={handleInputFocus} className="popup-input">
-                <div className="popup-input__text">
-                    <span className='popup-input__text-name'>Confirm password</span>
-                </div>
-                <input required onBlur={handleInputBlur} type="password" onChange = {(event) => {setConfirmPass(event.target.value)}} />
-            </div>
-            <button disabled={isBtnBlocked} type='submit' className="popup-next">
-                <span onClick={window.close}>Confirm</span>
-            </button>
-            {error && <div className="popup-error">{error}</div>}
-        </form>
+      <form onSubmit={dataPickUp} className="popup-tab">
+          <div className="popup-title"><h3>Create your account</h3></div>
+          <div onClick={handleInputFocus} className='popup-input'>
+              <div className="popup-input__text">
+                  <span className='popup-input__text-name'>Name</span>
+                  <span className='popup-input__text-symbols'>{username.length}/{maxLength}</span>
+              </div>
+              <input required onBlur={handleInputBlur} type="text" onChange = {usernameOnChange} />
+          </div>
+          <div onClick={handleInputFocus} className="popup-input">
+              <div className="popup-input__text">
+                  <span className='popup-input__text-name'>Email</span>
+              </div>
+              <input required onBlur={handleInputBlur} type="email" onChange = {(event) => {setEmail(event.target.value)}}  />
+          </div>
+          <div onClick={handleInputFocus} className="popup-input">
+              <div className="popup-input__text">
+                  <span className='popup-input__text-name'>Password</span>
+                  <span className='popup-input__text-symbols'>{pass.length}/{maxLength}</span>
+              </div>
+              <input required onBlur={handleInputBlur} type="password" onChange = {passwordOnChange} />
+          </div>
+          <div onClick={handleInputFocus} className="popup-input">
+              <div className="popup-input__text">
+                  <span className='popup-input__text-name'>Confirm password</span>
+              </div>
+              <input required onBlur={handleInputBlur} type="password" onChange = {(event) => {setConfirmPass(event.target.value)}} />
+          </div>
+          <button disabled={isBtnBlocked} type='submit' className="popup-next">
+              <span onClick={window.close}>Confirm</span>
+          </button>
+          {error && <div className="popup-error">{error}</div>}
+      </form>
     );
 }

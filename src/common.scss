@@ -149,6 +149,12 @@ a {
 }
 
 .tweet {
+  display: flex;
+  position: relative;
+  padding: rem(12) rem(16);
+  >:not(:last-child) {
+    margin-right: rem(12);
+  }
   &.show-comments {
     .tweet__comments {
 
@@ -162,18 +168,64 @@ a {
       transition: background-color 0.2s;
     }
   }
-  display: flex;
-  position: relative;
-  padding: rem(12) rem(16);
-  >:not(:last-child) {
-    margin-right: rem(12);
-  }
   &__avatar {
     flex-shrink: 0;
     width: rem(48);
     height: rem(48);
     border-radius: 50%;
     overflow: hidden;
+  }
+  &__information {
+    width: 100%;
+    position: relative;
+    word-break: break-word;
+  }
+  &__settings {
+    position: relative;
+    &.show {
+      .tweet__settings-list {
+        display: block;
+      }
+    }
+    &-btn {
+      width: rem(35);
+      height: rem(35);
+      padding: rem(8);
+      border-radius: 50%;
+      transition: background-color 200ms ease-in-out;
+      cursor: pointer;
+      img {
+        path {
+          stroke:red;
+        }
+      }
+      &:hover {
+        background-color: var(--btn-color);
+      }
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+    &-list {
+      position: absolute;
+      right: 0;
+      top: rem(50);
+      padding: rem(10) 0;
+      border-radius: 12px;
+      background-color: #3e3e3e;
+      z-index: 10;
+      display: none;
+      ul {
+        li {
+          cursor: pointer;
+          padding: rem(5) rem(20);
+          font-weight: bold;
+          &:hover {
+            background-color: #2e2e2e;
+          }
+        }
+      }
+    }
   }
   &__title {
     display: flex;
@@ -340,17 +392,36 @@ a {
     }
   }
   &__content {
-    p {
-      text-align: left;
+    width: 100%;
+    text-align: left;
+    span {
+      font-size: remF(19);
+      font-weight: bold;
     }
     &-img {
       border-radius: 36px;
       border:1px solid var(--border-color);
       overflow: hidden;
       margin-top: rem(10);
-      img {
+      position: relative;
+      max-width: rem(503);
+      width: 100%;
+      word-break: break-all;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 100%;
+        padding-top: 100%;
+      }
+
+      & > * {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
+        object-fit: cover;
       }
     }
   }
