@@ -2,11 +2,11 @@ import React, { Component, useState } from 'react'
 import {useEffect} from 'react'
 import "./feed-posts.scss";
 
-import Post from "./Post"; // Предположим, что у вас есть компонент Post
+import Post from "./Post";
 import search from "../feed-sidebar/img/search.svg";
 import { constants } from '../../constants'
 import { useAuth } from '../../context/authContext'
-import uploadImg from './img/svgrepo-com.svg'
+import uploadImg from './img/file-plus.svg'
 
 
 export default function FeedPosts() {

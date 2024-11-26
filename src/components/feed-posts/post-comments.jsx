@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 
-export default function Comment({comment}) {
+export default function Comment({commentData}) {
+    const [comment, setComment] = useState(commentData);
     return (
         <div className="tweet__comment">
             <div className="tweet__comment-avatar">
@@ -12,7 +13,7 @@ export default function Comment({comment}) {
                     <div className="tweet__comment-date"></div>
                 </div>
                 <div className="tweet__comment-text">
-                    <p>{comment}</p>
+                    {comment.content}
                 </div>
             </div>
         </div>
