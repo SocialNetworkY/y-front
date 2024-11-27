@@ -35,9 +35,6 @@ export default function Welcome() {
                         <div className="welcome-or">
                             <span>or</span>
                         </div>
-                        <div className="welcome-description">
-                            <p>say scooby doo but replace all the o with e</p>
-                        </div>
                         <div className="welcome-account">
                             <span>Already have an account?</span>
                             <button
