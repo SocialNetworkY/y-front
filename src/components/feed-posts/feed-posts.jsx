@@ -6,14 +6,14 @@ import Post from "./Post";
 import search from "../feed-sidebar/img/search.svg";
 import { constants } from '../../constants'
 import { useAuth } from '../../context/authContext'
-import uploadImg from './img/file-plus.svg'
+import uploadImg from './img/svgrepo-com.svg'
 
 
 export default function FeedPosts() {
   const [posts, setPosts] = useState([]);
   const [postStart, setPostStart] = useState(0);
-  const [postEnd, setPostEnd] = useState(12);
-  const [newPost, setNewPost] = useState({ title: "", content: "", tags: [] });
+  const [postEnd, setPostEnd] = useState(50);
+  const [newPost, setNewPost] = useState({ title: "", content: "", tags: [], images: [], videos: [] });
   const {sendRequest} = useAuth()
 
   useEffect(() => {
@@ -36,14 +36,20 @@ export default function FeedPosts() {
   function handleAddPost (){
     if (!newPost.title || !newPost.content) return;
 
+    const formData = new FormData();
+    formData.append('title', newPost.title)
+    formData.append('content', newPost.content)
+    newPost.tags.forEach((tag) => {
+      formData.append("tags", tag)
+    })
+    newPost.images.forEach((image) => formData.append(`images`, image));
+    newPost.videos.forEach((video) => formData.append(`videos`, video));
+
     console.log(newPost)
     sendRequest({
       url: `${constants.postApiV1}/posts`,
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newPost),
+      body: formData,
     }).then(async (response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -51,7 +57,7 @@ export default function FeedPosts() {
       return response.json();
     }).then(post => {
       setPosts((prevPosts) => [post, ...prevPosts]);
-      setNewPost({ title: "", content: "", tags: [] });
+      setNewPost({ title: "", content: "", tags: [], videos: [], images: [] });
     }).catch((error) => {
       console.error("error:", error);
     })
@@ -62,6 +68,18 @@ export default function FeedPosts() {
     setNewPost((prev) => ({ ...prev, [name]: value }));
   }
 
+  const handleFilesChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+
+    const images = selectedFiles.filter((file) => file.type.startsWith("image/"));
+    const videos = selectedFiles.filter((file) => file.type.startsWith("video/"));
+
+    setNewPost((prevPost) => ({
+      ...prevPost,
+      images: images,
+      videos: videos,
+    }));
+  };
 
   return (
     <section className="feed">
@@ -75,46 +93,45 @@ export default function FeedPosts() {
         <div>
           <div className="feed__create">
             <div className="feed__create-inner">
-              <div className="feed__create-avatar"><img src="" alt=""/></div>
               <div className="feed__create-inputs">
                 <input
-                  type="text"
-                  name="title"
-                  value={newPost.title}
-                  placeholder="Title"
-                  onChange={handleInputChange}
+                    type="text"
+                    name="title"
+                    value={newPost.title}
+                    placeholder="Title"
+                    onChange={handleInputChange}
                 />
-                {/*<input*/}
-                {/*  type="text"*/}
-                {/*  name="tags"*/}
-                {/*  value={newPost.tags}*/}
-                {/*  placeholder="Type Tags"*/}
-                {/*  onChange={handleInputChange}*/}
-                {/*/>*/}
+                <input
+                    type="text"
+                    name="tags"
+                    placeholder="Type Tags"
+                    onChange={(e) => {
+                      setNewPost((prevPost) => ({
+                        ...prevPost,
+                        tags: e.target.value.split(',').map(tag => tag.trim()).filter((tag) => tag),
+                      }))
+                    }}
+                />
                 <textarea
-                  name="content"
-                  value={newPost.content}
-                  placeholder="Write your post..."
-                  onChange={handleInputChange}
+                    name="content"
+                    value={newPost.content}
+                    placeholder="Write your post..."
+                    onChange={handleInputChange}
                 ></textarea>
               </div>
             </div>
             <div className="feed__create-buttons">
               <label className="feed__create-input">
                 <img src={uploadImg} alt=""/>
-                <input type="file"/>
+                <input name="" type="file" onChange={handleFilesChange}/>
               </label>
               <button className='btn' onClick={handleAddPost}>Add Post</button>
             </div>
           </div>
 
-
-          <div className="new-post-form">
-
-          </div>
           <div className="posts-list">
             {posts.map((post) => (
-              <Post key={post.id} postData={post}/>
+                <Post key={post.id} postData={post}/>
             ))}
           </div>
         </div>

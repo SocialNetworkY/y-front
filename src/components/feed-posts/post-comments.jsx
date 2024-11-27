@@ -1,7 +1,18 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {useAuth} from "../../context/authContext";
 
 export default function Comment({commentData}) {
     const [comment, setComment] = useState(commentData);
+    const [commentOwner, setCommentOwner] = useState(null);
+    const {getUser} = useAuth();
+
+    useEffect(() => {
+        async function fetchOwner() {
+            setCommentOwner(await getUser(comment.user_id))
+        }
+        fetchOwner();
+    }, []);
+
     return (
         <div className="tweet__comment">
             <div className="tweet__comment-avatar">

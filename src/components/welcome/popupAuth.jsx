@@ -14,12 +14,7 @@ export function PopupAuth() {
 
     const {setAccessToken} = useAuth();
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
-
-    const loginRegex = /^[a-zA-Z0-9]{3,52}$/;
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,255}$/;
 
 
     const [isBtnBlocked,setBtnBlocking] = useState(false);
@@ -30,11 +25,11 @@ export function PopupAuth() {
         setBtnBlocking(true);
 
         try {
-            if (!loginRegex.test(username)) {
+            if (!constants.loginRegex.test(username)) {
                 setError('Username Error');
                 return;
             }
-            if (!passwordRegex.test(pass)) {
+            if (!constants.passwordRegex.test(pass)) {
                 setError('Password Error');
                 return;
             }
@@ -74,7 +69,7 @@ export function PopupAuth() {
             }
 
             setAccessToken(responseActivationToken.token);
-            navigate("/feed");
+            navigate("/");
         } catch (error) {
             setError(`Unexpected error: ${error.message}`);
         } finally {
@@ -143,7 +138,7 @@ export function PopupAuth() {
               <input required onBlur={handleInputBlur} type="password" onChange = {(event) => {setConfirmPass(event.target.value)}} />
           </div>
           <button disabled={isBtnBlocked} type='submit' className="popup-next">
-              <span onClick={window.close}>Confirm</span>
+              <span>Confirm</span>
           </button>
           {error && <div className="popup-error">{error}</div>}
       </form>

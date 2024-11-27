@@ -26,48 +26,6 @@ class Popup extends Component {
             popupInput.classList.remove("focus");
         }
     };
-
-    render() {
-        const { onClose } = this.props;
-
-        return (
-            <div className="popup">
-                <div onClick={onClose} className="popup-overlay" />
-                <div className="popup-content">
-                    <div className="popup-title"><h3>Change your account</h3></div>
-                    <div onClick={this.handleInputFocus} className="popup-input">
-                        <div className="popup-input__text">
-                            <span className='popup-input__text-name'>Nickname</span>
-                            <span className='popup-input__text-symbols'>0/50</span>
-                        </div>
-                        <input onBlur={this.handleInputBlur} type="text"/>
-                    </div>
-                    <div onClick={this.handleInputFocus} className="popup-input">
-                        <div className="popup-input__text">
-                            <span className='popup-input__text-name'>Username</span>
-                            <span className='popup-input__text-symbols'>0/50</span>
-                        </div>
-                        <input onBlur={this.handleInputBlur} type="text"/>
-                    </div>
-                    <div onClick={this.handleInputFocus} className="popup-input">
-                        <div className="popup-input__text">
-                            <span className='popup-input__text-name'>New password</span>
-                        </div>
-                        <input onBlur={this.handleInputBlur} type="password"/>
-                    </div>
-                    <div onClick={this.handleInputFocus} className="popup-input">
-                        <div className="popup-input__text">
-                            <span className='popup-input__text-name'>Confirm password</span>
-                        </div>
-                        <input onBlur={this.handleInputBlur} type="password"/>
-                    </div>
-                    <button className="popup-confirm">
-                        <span>Confirm</span>
-                    </button>
-                </div>
-            </div>
-        );
-    }
 }
 
 

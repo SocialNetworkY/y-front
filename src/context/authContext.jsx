@@ -23,7 +23,7 @@ export function AuthProvider({ children }) {
             navigate("/login");
             setLoading(false)
         } else {
-            currentUser()
+            updateUser()
         }
     }
 
@@ -57,8 +57,7 @@ export function AuthProvider({ children }) {
         }
     }, [user])
 
-    async function currentUser() {
-        if (user) return user;
+    async function updateUser() {
         try {
             const firstResp = await sendRequest({url: `${constants.authApiV1}/authenticate`});
             if (!firstResp.ok) throw new Error(`Failed to fetch user id: ${firstResp.statusText}`);
@@ -75,6 +74,7 @@ export function AuthProvider({ children }) {
             throw error;
         }
     }
+
     async function refreshToken() {
         let newAccessToken = "";
         try {
@@ -97,15 +97,39 @@ export function AuthProvider({ children }) {
         }
     }
 
+    async function getUser(id) {
+        try {
+             const resp = await sendRequest({url: `${constants.userApiV1}/users/${id}`});
+             if (!resp.ok) throw new Error(`Failed to fetch user details: ${resp.statusText}`);
+             return await resp.json();
+         } catch (error) {
+             console.error('Error fetching user:', error);
+             throw error;
+         }
+    }
+
+    async function changePass(newPassword) {
+        const response = await sendRequest({
+            url: `${constants.authApiV1}/change-password`,
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({password: newPassword}),
+        })
+        if (!response.ok) throw new Error(`Failed to change password: ${response.statusText}`);
+    }
+
     const value = {
         setAccessToken,
         sendRequest,
-        currentUser
+        user,
+        updateUser,
+        getUser,
+        changePass
     }
 
     return (
-      <AuthContext.Provider value={value}>
-          {!loading && children}
-      </AuthContext.Provider>
+        <AuthContext.Provider value={value}>
+            {!loading && children}
+        </AuthContext.Provider>
     );
 }

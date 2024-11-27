@@ -44,7 +44,7 @@ export function PopupLogin() {
             }
 
             setAccessToken(json.token);
-            navigate("/feed");
+            navigate("/");
         } catch (error) {
             setError(`Unexpected error: ${error.message}`);
         } finally {

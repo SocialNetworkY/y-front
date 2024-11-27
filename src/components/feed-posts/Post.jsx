@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import postAva from './img/tweet-logo1.png';
 import Comment from './post-comments';
 import postImg from '../../img/send.svg';
@@ -11,12 +11,20 @@ export default function Post({ postData }) {
   const [showComments, setShowComments] = useState(false);
   const [postOwner, setPostOwner] = useState(null);
   const [post, setPost] = useState(postData);
-  const {currentUser, sendRequest} = useAuth();
+  const {user, sendRequest, getUser} = useAuth();
+  const [showSettings, setShowSettings] = useState(false);
+
+  useEffect(() => {
+    async function fetchPostOwner() {
+      setPostOwner(await getUser(post.user_id))
+    }
+    fetchPostOwner();
+  }, []);
 
 
   function updatePostInfo() {
     sendRequest({
-      url: `${constants.postApiV1}/posts/${postData.id}`,
+      url: `${constants.postApiV1}/posts/${post.id}`,
       method: 'GET',
     }).then(async (response) => {
       if (!response.ok) {
@@ -25,20 +33,17 @@ export default function Post({ postData }) {
       }
       return await response.json();
     }).then((post) => {
-        setPost(post)
+      setPost(post)
     })
   }
 
   const handleCommentChange = (e) => {
     setNewComment(e.target.value);
   };
-  const postSettings = () => {
-
-  }
 
   function likePost() {
     sendRequest({
-      url: `${constants.postApiV1}/posts/${postData.id}/${post.is_liked ? 'unlike' : 'like'}`,
+      url: `${constants.postApiV1}/posts/${post.id}/${post.is_liked ? 'unlike' : 'like'}`,
       method: 'GET',
     }).then((response) => {
       if (!response.ok) {
@@ -55,7 +60,7 @@ export default function Post({ postData }) {
       return;
     }
     sendRequest({
-      url: `${constants.postApiV1}/posts/${postData.id}/comments`,
+      url: `${constants.postApiV1}/posts/${post.id}/comments`,
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
@@ -74,16 +79,16 @@ export default function Post({ postData }) {
   return (
       <div className="tweet">
         <a href="/" className="tweet__avatar">
-          <img src={postAva} alt="Avatar"/>
+          <img src={postOwner && postOwner.avatar} alt="" />
         </a>
         <div className="tweet__information">
-          <div className="tweet__settings show">
-            <div onClick={postSettings} className="tweet__settings-btn"><img src={postSettingsImg} alt=""/></div>
+          <div className={`tweet__settings  ${showSettings ? 'show' : ''}`}>
+            <div onClick={()=>{setShowSettings(!showSettings)}} className={"tweet__settings-btn "}><img src={postSettingsImg} alt=""/></div>
             <div className="tweet__settings-list">
               <ul>
-                {(postData.user_id !== currentUser().id && !currentUser().admin) && <li><span>Report</span></li>}
+                {(post.user_id !== user.id && !user.admin) && <li><span>Report</span></li>}
 
-                {(currentUser().admin || postData.user_id === currentUser().id) &&
+                {(user.admin || post.user_id === user.id) &&
                     <>
                       <li><span>Edit</span></li>
                       <li><span>Delete</span></li>
@@ -94,25 +99,23 @@ export default function Post({ postData }) {
           </div>
           <div className="tweet__title">
             {/*<a href="/" className="tweet__title-name">{postData.name}</a>*/}
-            <a href="/" className="tweet__title-name">aslkdjalskdjaklsjdalksjdklasjdlkaj</a>
-            <div className="tweet__title-tag">{postData.tag}</div>
-            <div className="tweet__title-time">{postData.time}</div>
+            <a href="/" className={`tweet__title-name`}>{postOwner ? postOwner.nickname : 'postownernick'}</a>
+            <div className="tweet__title-tag">{post.tag}</div>
+            <div className="tweet__title-time">{post.posted_at}</div>
           </div>
           <div className="tweet__content">
-            <span>{postData.title}</span>
-            <p>{postData.content}</p>
-            {/*{postData.img && (*/}
-            {/*  <div className="tweet__content-img">*/}
-            {/*    <img src={postData.img} alt=""/>*/}
-            {/*  </div>*/}
-            {/*)}*/}
-            <div className="tweet__content-img">
-              <img src={postImg} alt=""/>
-            </div>
+            <span>{post.title}</span>
+            <p>{post.content}</p>
+            {
+                post.image_urls && post.image_urls.length > 0 &&
+                <div className="tweet__content-img">
+                  <img src={post.image_urls[0]} alt={postImg}/>
+                </div>
+            }
           </div>
-          <div className="tweet__controls">
-            <div
-                className={`tweet__btn tweet__btn--like ${post.is_liked ? 'active' : ''}`}
+            <div className="tweet__controls">
+              <div
+                  className={`tweet__btn tweet__btn--like ${post.is_liked ? 'active' : ''}`}
                 onClick={likePost}
             >
               <div className="tweet__btn-icon">

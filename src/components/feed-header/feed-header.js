@@ -13,12 +13,11 @@ const FeedHeader = () => {
                 <div className="header__container">
                     <nav className="nav">
                         <ul>
-                            <li><Link to="/feed"><img src={logo} alt=""/></Link></li>
-                            <li><Link to="/feed"><img src={navHome} alt=""/><span>Home</span></Link></li>
+                            <li><Link to="/"><img src={logo} alt=""/></Link></li>
+                            <li><Link to="/"><img src={navHome} alt=""/><span>Home</span></Link></li>
                             <li><Link to="/profile"><img src={navProfile} alt=""/><span>Profile</span></Link></li>
                         </ul>
                     </nav>
-                    <button className="btn"><span>Yeet</span></button>
                 </div>
             </div>
         </header>
