@@ -37,14 +37,13 @@ export function AuthProvider({ children }) {
         }
 
         const response = await makeRequest();
-        if (response.ok) {
-            return response;
-        }
 
         if (response.status === 401) {
             await refreshToken();
             return await makeRequest();
         }
+
+        return response;
     }
 
     useEffect(() => {

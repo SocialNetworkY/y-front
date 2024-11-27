@@ -20,7 +20,7 @@ export default function Comment({commentData}) {
             </div>
             <div className="tweet__comment-inner">
                 <div className="tweet__comment-title">
-                    <div className="tweet__comment-title_user"><span>{commentOwner && commentOwner.nickname}</span></div>
+                    <div className="tweet__comment-title_user"><a href={`users/${commentOwner ? commentOwner.id : 1}`}>{commentOwner && commentOwner.nickname}</a></div>
                     <div className="tweet__comment-title_date"><span>{comment && comment.created_at}</span></div>
                 </div>
                 <div className="tweet__comment-text">

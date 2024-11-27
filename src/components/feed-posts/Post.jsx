@@ -110,7 +110,7 @@ export default function Post({ postData }) {
         </div>
         <div className="tweet__title">
           {/*<a href="/" className="tweet__title-name">{postData.name}</a>*/}
-          <a href="/" className={`tweet__title-name`}>{postOwner ? postOwner.nickname : 'postownernick'}</a>
+          <a href={`users/${postOwner ? postOwner.id : 1}`} className={`tweet__title-name`}>{postOwner ? postOwner.nickname : 'postownernick'}</a>
           <div className="tweet__title-tag">{post.tag}</div>
           <div className="tweet__title-time">{post.posted_at}</div>
         </div>

@@ -10,12 +10,21 @@ import postSettingsImg from "../feed-posts/img/dots.svg";
 import Comment from "../feed-posts/post-comments";
 import Post from "../feed-posts/Post";
 
-export default function FeedProfile() {
+export default function FeedProfile({userId}) {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
     const [postStart, setPostStart] = useState(0);
     const [postEnd, setPostEnd] = useState(50);
-    const {user, sendRequest, updateUser} = useAuth()
+    const {user: currentUser, sendRequest: sendRequest, updateUser: updateUser, getUser: getUser} = useAuth()
+
+    useEffect(() => {
+        async function fetchUser() {
+            setUser(await getUser(userId))
+        }
+        fetchUser()
+    }, []);
+
 
     function changeAvatar(e) {
         const file = e.target.files[0];
@@ -52,6 +61,10 @@ export default function FeedProfile() {
     }
 
     useEffect(() => {
+        if (!user) {
+            return;
+        }
+
         fetch(`${constants.postApiV1}/posts/users/${user.id}?skip=${postStart}&limit=${postEnd}`)
             .then((response) => {
                 if (!response.ok) {
@@ -66,27 +79,29 @@ export default function FeedProfile() {
             .catch((error) => {
                 console.error("error:", error);
             });
-    }, [])
+    }, [user])
 
     return (
         <section className="feed-profile">
             <div className="container">
                 <div className="feed-profile__head">
                     <div className="feed-profile__title">
-                        <div className="feed-profile__title-avatar">
-                            <input id={'fileInput'} type='file' onChange={changeAvatar} style={{display: "none"}}/>
-                            <img src={user.avatar} alt="avatar"
-                                 onClick={() => document.getElementById("fileInput").click()}/>
+                        <div className="feed-profile__title-avatar" onClick={() => {if (user && currentUser && currentUser.id === user.id) document.getElementById("fileInput").click()}}>
+                            {user && currentUser && currentUser.id === user.id && <input id={'fileInput'} type='file' onChange={changeAvatar} style={{display: "none"}}/>}
+                            <img src={user && user.avatar} alt="avatar"/>
                         </div>
-                        <div className="feed-profile__title-btn">
-                            <button onClick={() => {
-                                setIsPopupVisible(true)
-                            }}><span>Change profile</span></button>
-                        </div>
+                        {
+                            user && currentUser && currentUser.id === user.id &&
+                            <div className="feed-profile__title-btn">
+                                <button onClick={() => {
+                                    setIsPopupVisible(true)
+                                }}><span>Change profile</span></button>
+                            </div>
+                        }
                     </div>
                     <div className="feed-profile__info">
-                        <div className="feed-profile__info-name"><span>{user.nickname}</span></div>
-                        <div className="feed-profile__info-username"><span>@{user.username}</span></div>
+                        <div className="feed-profile__info-name"><span>{user && user.nickname}</span></div>
+                        <div className="feed-profile__info-username"><span>@{user && user.username}</span></div>
                     </div>
                 </div>
                 <div className="feed-profile__tabs">
