@@ -6,9 +6,15 @@ import { handleInputFocus, handleInputBlur } from "../popup/popup";
 import Popup from "../popup/popup";
 import {useAuth} from "../../context/authContext";
 import {constants} from "../../constants";
+import postSettingsImg from "../feed-posts/img/dots.svg";
+import Comment from "../feed-posts/post-comments";
+import Post from "../feed-posts/Post";
 
 export default function FeedProfile() {
     const [isPopupVisible, setIsPopupVisible] = useState(false);
+    const [posts, setPosts] = useState([]);
+    const [postStart, setPostStart] = useState(0);
+    const [postEnd, setPostEnd] = useState(50);
     const {user, sendRequest, updateUser} = useAuth()
 
     function changeAvatar(e) {
@@ -45,6 +51,23 @@ export default function FeedProfile() {
                 }).catch((error) => console.error(error));
     }
 
+    useEffect(() => {
+        fetch(`${constants.postApiV1}/posts/users/${user.id}?skip=${postStart}&limit=${postEnd}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((posts) => {
+                setPosts(posts)
+                console.log(posts);
+            })
+            .catch((error) => {
+                console.error("error:", error);
+            });
+    }, [])
+
     return (
         <section className="feed-profile">
             <div className="container">
@@ -52,10 +75,13 @@ export default function FeedProfile() {
                     <div className="feed-profile__title">
                         <div className="feed-profile__title-avatar">
                             <input id={'fileInput'} type='file' onChange={changeAvatar} style={{display: "none"}}/>
-                            <img src={user.avatar} alt="avatar" onClick={() => document.getElementById("fileInput").click()} />
+                            <img src={user.avatar} alt="avatar"
+                                 onClick={() => document.getElementById("fileInput").click()}/>
                         </div>
                         <div className="feed-profile__title-btn">
-                            <button onClick={() => {setIsPopupVisible(true)}}><span>Change profile</span></button>
+                            <button onClick={() => {
+                                setIsPopupVisible(true)
+                            }}><span>Change profile</span></button>
                         </div>
                     </div>
                     <div className="feed-profile__info">
@@ -63,10 +89,22 @@ export default function FeedProfile() {
                         <div className="feed-profile__info-username"><span>@{user.username}</span></div>
                     </div>
                 </div>
+                <div className="feed-profile__tabs">
+                    <div data-tab="1" className='feed-profile__tabs-tab active'>
+                        <span>Posts</span>
+                    </div>
+                </div>
+                <div className="feed-profile__content">
+                    {posts.map((post) => (
+                        <Post key={post.id} postData={post}/>
+                    ))}
+                </div>
             </div>
-            {isPopupVisible && <Popup isOpen={isPopupVisible} onClose={() => {setIsPopupVisible(false)}}><ChangeProfilePopup user={user}/></Popup>}
+            {isPopupVisible && <Popup isOpen={isPopupVisible} onClose={() => {
+                setIsPopupVisible(false)
+            }}><ChangeProfilePopup user={user}/></Popup>}
         </section>
-);
+    );
 }
 
 function ChangeProfilePopup({user}) {
@@ -78,7 +116,7 @@ function ChangeProfilePopup({user}) {
 
     const {updateUser, sendRequest, changePass} = useAuth();
 
-    const [isBtnBlocked,setBtnBlocking] = useState(false);
+    const [isBtnBlocked, setBtnBlocking] = useState(false);
 
     const maxLength = 52;
 
@@ -98,7 +136,7 @@ function ChangeProfilePopup({user}) {
         }
 
         const response = await sendRequest({
-            url:  `${constants.userApiV1}/users/${user.id}`,
+            url: `${constants.userApiV1}/users/${user.id}`,
             method: 'PATCH',
             body: formData
         })
@@ -113,14 +151,14 @@ function ChangeProfilePopup({user}) {
                 await changePass(pass);
                 setPass('')
                 setConfirmPass('');
-            }else {
+            } else {
                 setError('Passwords do not match or are invalid');
             }
         }
 
         updateUser()
         setBtnBlocking(false);
-        
+
 
     }
 
@@ -184,13 +222,13 @@ function ChangeProfilePopup({user}) {
                 <div className="popup-input__text">
                     <span className='popup-input__text-name'>New password</span>
                 </div>
-                <input onBlur={handleInputBlur} type="password" onChange = {passwordOnChange} value={pass}/>
+                <input onBlur={handleInputBlur} type="password" onChange={passwordOnChange} value={pass}/>
             </div>
             <div onClick={handleInputFocus} className="popup-input">
                 <div className="popup-input__text">
                     <span className='popup-input__text-name'>Confirm password</span>
                 </div>
-                <input onBlur={handleInputBlur} type="password" onChange = {(event) => {setConfirmPass(event.target.value)}} value={confirmPass}/>
+                <input onBlur={handleInputBlur} type="password" onChange={(event) => {setConfirmPass(event.target.value)}} value={confirmPass}/>
             </div>
             <button disabled={isBtnBlocked} type='submit' className="popup-confirm">
                 <span>Confirm</span>

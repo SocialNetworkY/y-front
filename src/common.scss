@@ -28,6 +28,38 @@ body {
   }
 }
 
+
+html[data-theme='dark'] {
+
+}
+
+html[data-theme='light'] {
+  .logo {
+    background-color: var(--background-color);
+  }
+  .admin {
+    background-color: white;
+    &-nav {
+      background-color: white;
+    }
+    &-graph {
+      background:linear-gradient(152.97deg, #484b495c 18.75%, rgba(0, 0, 0, 0) 100%);
+    }
+    &-list {
+      background: linear-gradient(152.97deg, rgba(72, 75, 73, 0.3607843137) 18.75%, rgba(0, 0, 0, 0) 100%);
+      &__title {
+        color: #2f2f2f;
+      }
+      &__body tbody th {
+        color: #2f2f2f;
+      }
+    }
+  }
+}
+
+
+
+
 a {
   color: white;
 }
@@ -149,12 +181,8 @@ a {
 }
 
 .tweet {
-  display: flex;
   position: relative;
   padding: rem(12) rem(16);
-  >:not(:last-child) {
-    margin-right: rem(12);
-  }
   &.show-comments {
     .tweet__comments {
 
@@ -175,6 +203,12 @@ a {
     border-radius: 50%;
     overflow: hidden;
   }
+  &__inner {
+    display: flex;
+    >:not(:last-child) {
+      margin-right: rem(12);
+    }
+  }
   &__information {
     width: 100%;
     position: relative;
@@ -183,8 +217,14 @@ a {
   &__settings {
     position: relative;
     &.show {
-      .tweet__settings-list {
-        display: block;
+      .tweet__settings {
+        &-list {
+          display: block;
+
+        }
+        &-btn {
+          background-color: var(--btn-color);
+        }
       }
     }
     &-btn {
@@ -210,7 +250,7 @@ a {
       position: absolute;
       right: 0;
       top: rem(50);
-      padding: rem(10) 0;
+      overflow: hidden;
       border-radius: 12px;
       background-color: #3e3e3e;
       z-index: 10;
@@ -425,25 +465,43 @@ a {
       }
     }
   }
+
+
+
   &__comments {
-    position: absolute;
-    border-bottom:1px solid var(--border-color);
     transition: height var(--hover-transition);
-    top: 100%;
-    left: 0;
     width: 100%;
-    min-height: 300px;
     background-color: var(--background-color);
-    z-index: 100;
     text-align: left;
-    padding: rem(20) rem(20) rem(20) rem(75);
-    >:not(:last-child) {
-      margin-bottom: rem(30);
-    }
     &-controls {
+      padding: rem(20) rem(20) rem(20) rem(60);
       width: 100%;
       display: flex;
       justify-content: space-between;
+      position: relative;
+      textarea {
+        width: rem(300);
+        resize: none;
+        min-height: rem(60);
+        max-height: rem(200);
+        padding: rem(10) rem(15) rem(10) 0;
+        font-size: remF(18);
+        &::placeholder {
+          font-size: remF(18);
+        }
+        &:focus {
+          outline:none;
+        }
+      }
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: rem(-15);
+        width: calc(100% + rem(31));
+        height: 1px;
+        background-color: var(--border-color);
+      }
       &_btn {
         max-width: rem(110);
         padding: rem(15) 0;
@@ -468,26 +526,52 @@ a {
       }
     }
     &-list {
+      padding-top: rem(12);
       >:not(:first-child) {
-      border-top: 1.5px solid var(--btn-color);
-    }
-    }
-    &-comment {
-      span {
-        font-size: remF(16);
-        line-height: remF(20);
-      }
-      p {
-        font-size: remF(14);
-        line-height: remF(16);
+        border-top: 1.5px solid var(--border-color);
       }
     }
-
   }
   &__comment {
+    padding: rem(12) 0 rem(12) rem(60);
+
     display: flex;
-    padding: rem(10) 0;
-    word-wrap: break-word;
+    >:not(:last-child) {
+      margin-right: rem(12);
+    }
+    &-avatar {
+      width: rem(48);
+      height: rem(48);
+      flex-shrink: 0;
+      img {
+        border-radius: 50%;
+      }
+    }
+    &-title {
+     display: flex;
+      >:not(:last-child) {
+        margin-right: rem(10);
+      }
+      >* {
+        color: var(--gray);
+      }
+    }
+    &-text {
+      word-break: break-word;
+      p {
+        font-size: remF(16);
+        line-height: remF(18);
+      }
+    }
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--border-color);
   }
 }
 
@@ -629,6 +713,11 @@ a {
     flex-direction: column;
     >:not(:first-child) {
       margin-top: rem(34);
+    }
+  }
+  &-tab {
+     button {
+      margin-top: rem(25) !important;
     }
   }
 }

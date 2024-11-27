@@ -19,7 +19,7 @@ class App extends Component {
                             <Route path="/login" element={<Welcome />} />
                             <Route path="/" element={<Feed />} />
                             <Route path="/profile" element={<Profile/>} />
-                            <Route path="/admin" element={<AdminPanel/>} />
+                            <Route path="/admin" element={<AdminPanel/>}/>
                         </Routes>
                     </div>
                 </AuthProvider>
