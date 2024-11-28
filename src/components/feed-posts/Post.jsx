@@ -126,7 +126,7 @@ export default function Post({ postData }) {
         </div>
         <div className="tweet__controls">
           <div
-              className={`tweet__btn tweet__btn--like ${post.is_liked ? 'active' : ''}`}
+              className={`tweet__btn tweet__btn--like ${post && post.is_liked && 'active'}`}
               onClick={likePost}
           >
             <div className="tweet__btn-icon">

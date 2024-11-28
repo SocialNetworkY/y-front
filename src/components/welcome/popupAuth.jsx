@@ -81,18 +81,6 @@ export function PopupAuth() {
 
     const maxLength = 52;
 
-    function usernameOnChange(event) {
-        setUsername(event.target.value);
-
-        const popupInput = event.currentTarget.closest(".popup-input");
-
-        if (username.length > maxLength) {
-            popupInput.classList.add("error");
-        } else {
-            popupInput.classList.remove("error");
-        }
-
-    }
     function passwordOnChange(event) {
         setPass(event.target.value);
 
@@ -111,12 +99,12 @@ export function PopupAuth() {
     return (
       <form onSubmit={dataPickUp} className="popup-tab">
           <div className="popup-title"><h3>Create your account</h3></div>
-          <div onClick={handleInputFocus} className='popup-input'>
+          <div onClick={handleInputFocus} className={`popup-input ${username.length > maxLength && 'error'}`}>
               <div className="popup-input__text">
                   <span className='popup-input__text-name'>Name</span>
                   <span className='popup-input__text-symbols'>{username.length}/{maxLength}</span>
               </div>
-              <input required onBlur={handleInputBlur} type="text" onChange = {usernameOnChange} />
+              <input required onBlur={handleInputBlur} type="text" onChange = {(e) => {setUsername(e.target.value)}} />
           </div>
           <div onClick={handleInputFocus} className="popup-input">
               <div className="popup-input__text">
